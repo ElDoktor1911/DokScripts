@@ -9,7 +9,7 @@ Calling a script is made by adding a GameLogic in Arma Editor and by adding this
 
 Some GameLogic/Scripts has to be synchronized with "Simple Trigger" or "Object" set on map editor.
 
-Each script work as following :
+Each script works as following :
 
 - Civilian Vehicle<br/>
 *Description* : When player enter a vehicle, side change to civilian and "can't be detected" by ennemies.<br/>

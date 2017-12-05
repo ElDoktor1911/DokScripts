@@ -19,6 +19,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+//Système pour le chargement des scripts côté client
 DOKSCRIPTS_fnc_loadLocalModule = [];
 "DokScripts_loadClientModule" addPublicVariableEventHandler {
 	if(isServer)exitWith{};
@@ -33,33 +34,7 @@ DOKSCRIPTS_fnc_loadLocalModule = [];
 	}forEach _value;
 };
 
-
-/*DOKSCRIPTS_fnc_loadLocalModule = {
-	if(!hasInterface)exitWith{};
-	{
-		systemChat format [":: Chargement du module %1",_x];
-		[] execVM _x;
-	}forEach _this;
-};
-
-DOKSCRIPTS_fnc_playerConnect = {
-	params ["_owner"];
-	_owner publicVariableClient "DokScripts_common";
-	sleep 1;
-	[] remoteExecCall ["DokScripts_common",_owner];
-	sleep 1;
-	DokScripts_loadClientModule remoteExec ["DOKSCRIPTS_fnc_loadLocalModule",_owner];
-};
-
-DokScripts_fnc_waitForLoadedModule = {
-	private _nbModules = count DokScripts_loadClientModule;
-	sleep 2;
-	while {count DokScripts_loadClientModule != _nbModules} do {
-		sleep 2;
-	};
-	DokScripts_loadClientModule remoteExec ["DOKSCRIPTS_fnc_loadLocalModule",-2];
-};*/
-
+//Envoi un message à une distance _dist de la position _pos d'un objet depuis le serveur aux clients
 DOKSCRIPTS_fnc_sendHintFromServer = {
 	params ["_message",["_dist",0],["_pos",[]],["_radio",""]];
 	if(isServer && isMultiplayer)then{
@@ -83,7 +58,7 @@ DOKSCRIPTS_fnc_sendHintFromServer = {
 	};
 };
 
-
+//Retourne l'id du Headless Client si présent sinon 2 (le serveur)
 DOKSCRIPTS_fnc_getHCID = {
 	private _curators = allMissionObjects "HeadlessClient_F";
 	private _hc_id = 2;
@@ -93,6 +68,7 @@ DOKSCRIPTS_fnc_getHCID = {
 	_hc_id
 };
 
+//Retourne un nombre _nbPos de positions aléatoires dans une zone donnée
 DOKSCRIPTS_fnc_randomPosInArea = {
 	params ["_nbPos","_area"];
 	private _poss = [];
@@ -103,18 +79,21 @@ DOKSCRIPTS_fnc_randomPosInArea = {
 	_poss
 };
 
+//Retourne le nombre de "cargo" d'un véhicule
 DOKSCRIPTS_fnc_getCargoVehicle = {
 	params ["_veh"];
 	private _count = 0;
 	count(fullCrew [_veh, "cargo", true])
 };
 
+//Retourne le nombre de "turret" d'un véhicule
 DOKSCRIPTS_fnc_getTurretVehicle = {
 	params ["_veh"];
 	private _count = 0;
 	count(fullCrew [_veh, "turret", true])
 };
 
+//Retourne une liste de _nb class présente en jeu de la _side indiquée
 DOKSCRIPTS_fnc_getClass = {
 	params ["_side","_nb"];
 	private _classTmp = [];
@@ -151,4 +130,12 @@ DOKSCRIPTS_fnc_goBackInVehicle = {
 	{
 		_x forceSpeed -1;
 	}forEach _units;
+};
+
+//Supprime tous les waypoints d'un groupe
+DOKSCRIPTS_fnc_deleteAllWaypoints = {
+	params ["_grp"];
+	while {(count (waypoints _grp)) > 0} do {
+  		deleteWaypoint ((waypoints _grp) select 0);
+ 	};
 };
